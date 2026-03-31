@@ -1,63 +1,42 @@
+const URL = "https://teachablemachine.withgoogle.com/models/X_HrR4tJg/";
+let model, webcam, labelContainer, maxPredictions;
+
 const translations = {
   ko: {
-    title: "저녁 메뉴 추천",
-    heading: "오늘 저녁 뭐 먹지?",
-    recommend: "메뉴 추천받기",
-    theme: "다크 모드",
-    default: "메뉴를 추천해드릴게요!",
+    title: "인공지능 동물상 테스트",
+    heading: "나의 동물상은?",
+    subHeading: "강아지상일까, 고양이상일까? AI가 분석해드립니다!",
+    startBtn: "테스트 시작하기 (웹캠)",
     contactHeading: "제휴 문의",
     labelEmail: "이메일 주소",
     labelMessage: "문의 내용",
     submitBtn: "보내기",
-    placeholderEmail: "example@mail.com",
-    placeholderMessage: "문의 내용을 입력해주세요.",
-    menus: [
-      { name: "비빔밥", img: "https://images.unsplash.com/photo-1590301157890-4810ed352733?q=80&w=400" },
-      { name: "스테이크", img: "https://images.unsplash.com/photo-1546241072-48010ad2862c?q=80&w=400" },
-      { name: "초밥", img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=400" },
-      { name: "파스타", img: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?q=80&w=400" },
-      { name: "라면", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=400" }
-    ]
+    dog: "강아지",
+    cat: "고양이"
   },
   en: {
-    title: "Dinner Recommender",
-    heading: "What's for dinner?",
-    recommend: "Recommend Menu",
-    theme: "Dark Mode",
-    default: "I'll recommend a menu!",
+    title: "AI Animal Face Test",
+    heading: "What's Your Animal Face?",
+    subHeading: "Dog or Cat? Our AI will analyze for you!",
+    startBtn: "Start Test (Webcam)",
     contactHeading: "Affiliate Inquiry",
     labelEmail: "Email Address",
     labelMessage: "Message",
     submitBtn: "Send",
-    placeholderEmail: "example@mail.com",
-    placeholderMessage: "Enter your message here.",
-    menus: [
-      { name: "Bibimbap", img: "https://images.unsplash.com/photo-1590301157890-4810ed352733?q=80&w=400" },
-      { name: "Steak", img: "https://images.unsplash.com/photo-1546241072-48010ad2862c?q=80&w=400" },
-      { name: "Sushi", img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=400" },
-      { name: "Pasta", img: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?q=80&w=400" },
-      { name: "Ramen", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=400" }
-    ]
+    dog: "Dog",
+    cat: "Cat"
   },
   ja: {
-    title: "晩御飯のおすすめ",
-    heading: "今夜、何食べる？",
-    recommend: "メニューを提案",
-    theme: "ダークモード",
-    default: "メニューを提案します！",
-    contactHeading: "提携のお問い合わせ",
+    title: "AI動物顔診断",
+    heading: "私の動物顔は？",
+    subHeading: "犬顔？猫顔？AIが分析します！",
+    startBtn: "診断開始 (ウェブカメラ)",
+    contactHeading: "提휴のお問い合わせ",
     labelEmail: "メールアドレス",
     labelMessage: "お問い合わせ内容",
     submitBtn: "送信",
-    placeholderEmail: "example@mail.com",
-    placeholderMessage: "内容を入力してください。",
-    menus: [
-      { name: "ビビンバ", img: "https://images.unsplash.com/photo-1590301157890-4810ed352733?q=80&w=400" },
-      { name: "ステーキ", img: "https://images.unsplash.com/photo-1546241072-48010ad2862c?q=80&w=400" },
-      { name: "寿司", img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=400" },
-      { name: "パスタ", img: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?q=80&w=400" },
-      { name: "라면", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=400" }
-    ]
+    dog: "犬",
+    cat: "猫"
   }
 };
 
@@ -67,22 +46,12 @@ function updateUI() {
   const t = translations[currentLang];
   document.getElementById('site-title').textContent = t.title;
   document.getElementById('main-heading').textContent = t.heading;
-  document.getElementById('recommend-btn').textContent = t.recommend;
-  document.getElementById('theme-toggle').textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
-  
-  // Contact form translations
+  document.getElementById('sub-heading').textContent = t.subHeading;
+  document.getElementById('start-btn').textContent = t.startBtn;
   document.getElementById('contact-heading').textContent = t.contactHeading;
   document.getElementById('label-email').textContent = t.labelEmail;
   document.getElementById('label-message').textContent = t.labelMessage;
   document.getElementById('submit-btn').textContent = t.submitBtn;
-  document.getElementById('email').placeholder = t.placeholderEmail;
-  document.getElementById('message').placeholder = t.placeholderMessage;
-
-  // Update menu if not empty
-  const menuName = document.getElementById('menu-name').textContent;
-  if (menuName === translations['ko'].default || menuName === translations['en'].default || menuName === translations['ja'].default) {
-    document.getElementById('menu-name').textContent = t.default;
-  }
 }
 
 function changeLanguage(lang) {
@@ -91,28 +60,66 @@ function changeLanguage(lang) {
   updateUI();
 }
 
-function recommendMenu() {
-  const menus = translations[currentLang].menus;
-  const randomIndex = Math.floor(Math.random() * menus.length);
-  const selected = menus[randomIndex];
+// Teachable Machine Logic
+async function init() {
+  document.getElementById('start-btn').style.display = 'none';
+  const modelURL = URL + "model.json";
+  const metadataURL = URL + "metadata.json";
+
+  model = await tmImage.load(modelURL, metadataURL);
+  maxPredictions = model.getTotalClasses();
+
+  const flip = true;
+  webcam = new tmImage.Webcam(300, 300, flip);
+  await webcam.setup();
+  await webcam.play();
+  window.requestAnimationFrame(loop);
+
+  document.getElementById("webcam-container").appendChild(webcam.canvas);
+  labelContainer = document.getElementById("label-container");
+  for (let i = 0; i < maxPredictions; i++) {
+    const bar = document.createElement("div");
+    bar.className = "result-bar";
+    bar.innerHTML = `
+      <div class="label-text"></div>
+      <div class="bar-bg">
+        <div class="bar-fill"></div>
+      </div>
+    `;
+    labelContainer.appendChild(bar);
+  }
+}
+
+async function loop() {
+  webcam.update();
+  await predict();
+  window.requestAnimationFrame(loop);
+}
+
+async function predict() {
+  const prediction = await model.predict(webcam.canvas);
+  const t = translations[currentLang];
   
-  document.getElementById('menu-name').textContent = selected.name;
-  document.getElementById('menu-image').src = selected.img;
+  for (let i = 0; i < maxPredictions; i++) {
+    const className = prediction[i].className; // "dog" or "cat"
+    const prob = prediction[i].probability.toFixed(2);
+    const labelDisplay = className === "dog" ? t.dog : (className === "cat" ? t.cat : className);
+    
+    const bar = labelContainer.childNodes[i];
+    bar.querySelector('.label-text').textContent = `${labelDisplay}: ${(prob * 100).toFixed(0)}%`;
+    const fill = bar.querySelector('.bar-fill');
+    fill.style.width = (prob * 100) + "%";
+    fill.className = `bar-fill ${className}-fill`;
+  }
 }
 
 // Theme Toggle
 const themeToggle = document.getElementById('theme-toggle');
-const body = document.body;
-
-if (localStorage.getItem('theme') === 'dark') {
-  body.classList.add('dark-mode');
-}
+if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
 
 themeToggle.addEventListener('click', () => {
-  body.classList.toggle('dark-mode');
-  localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
-  updateUI();
+  document.body.classList.toggle('dark-mode');
+  localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
 });
 
-// Init
 updateUI();
