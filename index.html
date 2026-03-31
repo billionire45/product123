@@ -38,6 +38,19 @@
         <button type="submit" id="submit-btn">보내기</button>
       </form>
     </section>
+
+    <section id="comments-section" style="margin-top: 50px; width: 100%; max-width: 800px; background-color: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      <div id="disqus_thread"></div>
+      <script>
+          (function() { 
+          var d = document, s = d.createElement('script');
+          s.src = 'https://https-product123-c38-pages-dev.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+          })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
   </main>
 
   <script defer type="text/javascript" src="main.js"></script>
