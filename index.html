@@ -1,14 +1,30 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Theme Switcher</title>
+  <title id="site-title">저녁 메뉴 추천</title>
   <link href='style.css' rel='stylesheet'>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button id="theme-toggle">Switch to Dark Mode</button>
+  <div class="controls">
+    <div class="lang-buttons">
+      <button onclick="changeLanguage('ko')">한국어</button>
+      <button onclick="changeLanguage('en')">English</button>
+      <button onclick="changeLanguage('ja')">日本語</button>
+    </div>
+    <button id="theme-toggle">Dark Mode</button>
+  </div>
+
+  <main>
+    <h1 id="main-heading">오늘 저녁 뭐 먹지?</h1>
+    <div id="menu-card" class="card">
+      <img id="menu-image" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=400" alt="food">
+      <h2 id="menu-name">메뉴를 추천해드릴게요!</h2>
+    </div>
+    <button id="recommend-btn" onclick="recommendMenu()">메뉴 추천받기</button>
+  </main>
+
   <script defer type="text/javascript" src="main.js"></script>
 </body>
 </html>
